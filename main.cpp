@@ -7,6 +7,7 @@ using namespace std;
  * sort and search.
  * kommer på tentan.
  * Template
+ * Template class
  * selection sort
  *   find minimum and swap
  * Insertion sort
@@ -29,9 +30,101 @@ using namespace std;
  * 670819
  * 607819
  * 607189
- *
- *
+ * 067189
+ * 061789
+ * 016789
+ * --------search-----------------
+ * linear search/ sequential
+ * binear search (sorted array)
+ *      0123456789
+ * find middle
+ * search for 8
+ * 8 < middle?
+ * look at greater part than middle
+ *      6789
+ * new middle
+ *      89
+ * return 6+1
 */
+//header
+template<typename T>
+
+class vector
+{
+private:
+    T *items;
+    int nrOfItems;
+    int capacity;
+    int capacityIncrement;
+    void expand();
+public:
+    vector();//A1
+    vector(int capacity); //same as A1
+    vector(int capacity, int capacityIncrement);//same as A1
+    ~vector();
+    vector(const vector<T> &obj);
+    vector<T>& operator=(const vector &obj);
+    vector<T>& operator+(const vector &obj);// vector< > vect4; vect4=vect1 + vect2;
+    vector<T>& operator[](const vector &obj);//obj[2] returns value at 2 element;
+    void addLast(T item);
+    void addFirst(T item);
+    void addAt(int index, T item);
+    T getFirst();
+    T getLast();
+    T getAt();
+    T removeFirst();
+    T removeLast();
+    T removeAt(int index);
+    void removeBetween(int start, int end);
+    void clear();//delete array and create new empty;
+
+};
+
+template<typename T>
+vector<T>::vector()
+{
+    this->capacity=10;
+    this->capacityIncrement=10;
+    this->nrOfItems=0;
+    this->items=new T[this->capacity];
+
+}
+template<typename T>
+vector<T>::~vector()
+{
+    delete [] this->items;
+}
+template<typename T>
+vector<T>::vector(const vector<T> &obj)
+{
+    this->capacity=obj.capacity;
+    this->capacityIncrement=obj.capacityIncrement;
+    this->nrOfItems=obj.nrOfItems;
+    this->items= new T [this->capacity];
+    for(int i=0; i < this->nrOfItems; i++)
+    {
+        this->items[i]=obj.items[i];
+    }
+}
+template<typename T>
+vector<T>& vector<T>::operator =(const vector<T> &obj)
+{
+    if(this != &obj)
+    {
+        delete [] this->items;
+        this->capacity=obj.capacity;
+        this->capacityIncrement=obj.capacityIncrement;
+        this->nrOfItems=obj.nrOfItems;
+        this->items= new T [this->capacity];
+        for(int i =0; i < this->nrOfItems; i++)
+        {
+            this->items[i]=obj.items[i];
+        }
+    }
+    return *this;
+}
+
+
 void generatRandomValues(string arr[] , int SIZE); //fill arr
 template <typename T>
 void printAllValues(T arr[], int SIZE);//print with for looping
@@ -41,6 +134,10 @@ template <typename T>//only one function at a time.
 void insertion_sort(T arr[], int SIZE);//sort low 2 big
 template <typename T>//only one function at a time.
 void bubble_sort(T arr[], int SIZE);//sort low 2 big
+template <typename T>//only one function at a time.
+int linear_search(T arr[], int SIZE, T key);//sort low 2 big
+template <typename T>//only one function at a time.
+int binary_search(T arr[], int SIZE, T key);//
 //void swap(string &a, string &b);
 //int findMinimumPosition(string arr[], int SIZE);
 
@@ -160,6 +257,90 @@ void bubble_sort(T arr[], int SIZE)
 
         }
 
+    }
+}
+
+template <typename T>//only one function at a time.
+int linear_search(T arr[], int SIZE, T key)
+{
+    int pos=-1;
+    for(int i=0; i < SIZE; i++)
+    {
+        if(arr[i]==key)
+        {
+            pos=i;
+        }
+    }
+    return pos +1;
+}
+
+template <typename T>//only one function at a time.
+
+int binary_search(T arr[], int SIZE, T key)
+{
+    int start =0;
+    int end = SIZE -1;
+    int mid=(start+end)/2;
+    while(end >= start && arr[mid] != key)
+    {
+
+        if(key > arr[mid])
+        {
+            start = mid +1;
+
+        }
+        else
+        {
+            end = mid-1;
+        }
+        mid=(start+end)/2;
+
+    }
+    if(start > end)
+    {
+        mid= -1;
+    }
+
+
+    return mid+1;
+}
+
+template <typename T>
+void vector<T>::expand()
+{
+    T* temp=new T [this->capacity+this->capacityIncrement];
+    for(int i=0; i < this->nrOfItems; i++)
+    {
+        temp[i]=this->items[i];
+    }
+    delete [] this->items;
+    this->items=temp;
+}
+template <typename T>
+void vector<T>::addAt(int index, T item)throw(...) //throw(...) ... means accept any type.
+{
+    if(index > this->nrOfItems)
+    {
+        throw "not allowed position!";
+
+        /*
+         * in main
+         * try
+         * {
+         *   vect.addAt(2,items);
+         * }
+         * catch(char *e)
+         * {
+         *  cout << e << endl;
+         * }
+         */
+    }
+    //if array full. expand and additem
+    if(this->nrOfItems== this->capacity)
+    {
+        this->expand();
+        this->items[this->nrOfItems++]=this->items[index];
+        this->items[index]=item;
     }
 }
 
