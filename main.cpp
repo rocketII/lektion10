@@ -80,6 +80,46 @@ public:
 
 };
 
+template <typename T>
+void vector<T>::expand()
+{
+    T* temp=new T [this->capacity+this->capacityIncrement];
+    for(int i=0; i < this->nrOfItems; i++)
+    {
+        temp[i]=this->items[i];
+    }
+    delete [] this->items;
+    this->items=temp;
+}
+template <typename T>
+void vector<T>::addAt(int index, T item)throw(...) //throw(...) ... means accept any type.
+{
+    if(index > this->nrOfItems)
+    {
+        throw "not allowed position!";
+
+        /*
+         * in main
+         * try
+         * {
+         *   vect.addAt(2,items);
+         * }
+         * catch(char *e)
+         * {
+         *  cout << e << endl;
+         * }
+         */
+    }
+    //if array full. expand and additem
+    if(this->nrOfItems== this->capacity)
+    {
+        this->expand();
+        this->items[this->nrOfItems++]=this->items[index];
+        this->items[index]=item;
+    }
+}
+
+
 template<typename T>
 vector<T>::vector()
 {
@@ -123,7 +163,52 @@ vector<T>& vector<T>::operator =(const vector<T> &obj)
     }
     return *this;
 }
+template<typename T>
+vector<T>& vector<T>::operator+(const vector &obj)
+{
+    /*
+    vector vect 1; //array of of size 10
+    vect1.addAt(0,1);
+    vector vect2;
+    vect2.addAt(0,1);
+    vect2.addAt(1,2);
+    vector vect3;
+    vect3 = vect1+vect2
+            */
+    vector<T> v;
+    for(int i=0; i< this->nrOfItems; i++)
+    {
+        v.addLast(this->items[i]);
 
+    }
+    for(int i=0; i< obj.nrOfItems; i++)
+    {
+        v.addLast(obj.items[i]);
+
+    }
+
+    return v ;
+
+}
+template<typename T>
+T vector<T>::operator[](int index)const throw(...)//throw check valid index
+{
+    if(index < 0 || index >this->nrOfItems)
+    {
+        throw "Totz invalid index!!";
+    }
+    return this->getAt(index);
+
+}
+template<typename T>
+void vector<T>::addLast(T item)
+{
+    if(this->capacity==this->nrOfItems)
+        expand();
+    this->items[nrofItems++]=item;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
 
 void generatRandomValues(string arr[] , int SIZE); //fill arr
 template <typename T>
@@ -303,45 +388,6 @@ int binary_search(T arr[], int SIZE, T key)
 
 
     return mid+1;
-}
-
-template <typename T>
-void vector<T>::expand()
-{
-    T* temp=new T [this->capacity+this->capacityIncrement];
-    for(int i=0; i < this->nrOfItems; i++)
-    {
-        temp[i]=this->items[i];
-    }
-    delete [] this->items;
-    this->items=temp;
-}
-template <typename T>
-void vector<T>::addAt(int index, T item)throw(...) //throw(...) ... means accept any type.
-{
-    if(index > this->nrOfItems)
-    {
-        throw "not allowed position!";
-
-        /*
-         * in main
-         * try
-         * {
-         *   vect.addAt(2,items);
-         * }
-         * catch(char *e)
-         * {
-         *  cout << e << endl;
-         * }
-         */
-    }
-    //if array full. expand and additem
-    if(this->nrOfItems== this->capacity)
-    {
-        this->expand();
-        this->items[this->nrOfItems++]=this->items[index];
-        this->items[index]=item;
-    }
 }
 
 /*void swap(string &a, string &b)
