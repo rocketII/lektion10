@@ -208,6 +208,31 @@ void vector<T>::addLast(T item)
     this->items[nrofItems++]=item;
 }
 
+template<typename T>
+void vector<T>::removeBetween(int start, int end)throw(...)
+{
+    if(this->nrOfItems ==0)
+    {
+        throw "no item!";
+    }
+    if(start < 0 || end > this->nrOfItems)
+        throw "Totz invalid interval!";
+    for(int i=start; i<end;i++)
+    {
+        this->items[i]=this->items[--this->nrOfItems];
+    }
+}
+
+template<typename T>
+void vector<T>::clear()
+{
+    delete [] this->items;
+    this->capacity=10;
+    this->capacityIncrement=10;
+    this->nrOfItems=0;
+    this->items= new T[this->capacity];
+}
+
 /////////////////////////////////////////////////////////////////////////////////
 
 void generatRandomValues(string arr[] , int SIZE); //fill arr
@@ -226,9 +251,44 @@ int binary_search(T arr[], int SIZE, T key);//
 //void swap(string &a, string &b);
 //int findMinimumPosition(string arr[], int SIZE);
 
-
+//////////////////////////////////////////////////////
+/// \brief main
+/// \return
+//////////////////////////////////////////////////////
+//#include vector.h
 int main()
 {
+    ///////test vector
+    vector<int> vect1;
+    try
+    {
+        vect1.getFirst();//Error!
+        vect1.addFirst(19);
+        vect1.addLast(27);   /// |19|27 | | | | | | | | |
+        vect1.addAt(4,12);   ///bad! get u error :'(  index < item
+        vect1.addAt(0,14);   /// |18||27 |19|14| | | | | |
+        vect1.addFirst(18);  /// |18||27 |19|14| | | | | |   //
+        for(int i =0; i < vect1.size(); i++)
+        {
+            cout << vect1.getAt(i);
+            cout << vect1[i];
+        }
+        vector<int> vect1;
+        vect1.addFirst(16);
+        vector <int> vect2; //copy  = vect1
+        vect2.addFirst(18);
+        vect2.addLast(2);
+        vect1=vect2; //assignment
+        vector <int> vect3;
+        vect3=vect1+vect2; // |16|18|2|
+        vect1.removeBetween(1,4);
+    }
+    catch(char *e)
+    {
+        cout << e << endl;
+    }
+
+    ///////test sort search
     const int SIZE=20;
     //int intArr[SIZE];
     string arr[SIZE];
@@ -244,6 +304,12 @@ int main()
     printAllValues(arr, SIZE);
     return 0;
 }
+
+
+
+//////////////////////////////////////////////////
+///
+//////////////////////////////////////////////////
 
 void generatRandomValues(string arr[] , int SIZE)
 {
