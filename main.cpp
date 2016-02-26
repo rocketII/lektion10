@@ -2,7 +2,12 @@
 #include<ctime>
 #include<cstdlib>
 #include<string>
+//#include<exception>
+#include<stdexcept>
+
 using namespace std;
+
+
 /*
  * sort and search.
  * kommer på tentan.
@@ -46,7 +51,16 @@ using namespace std;
  *      89
  * return 6+1
 */
-//header
+
+
+///////////////////////////////
+//header vector.h
+//////////////////////////////
+
+
+
+/*
+
 template<typename T>
 
 class vector
@@ -56,29 +70,42 @@ private:
     int nrOfItems;
     int capacity;
     int capacityIncrement;
-    void expand();
+    void expand();                                                          //done
 public:
-    vector();//A1
-    vector(int capacity); //same as A1
-    vector(int capacity, int capacityIncrement);//same as A1
-    ~vector();
-    vector(const vector<T> &obj);
-    vector<T>& operator=(const vector &obj);
-    vector<T>& operator+(const vector &obj);// vector< > vect4; vect4=vect1 + vect2;
-    vector<T>& operator[](const vector &obj);//obj[2] returns value at 2 element;
-    void addLast(T item);
-    void addFirst(T item);
-    void addAt(int index, T item);
-    T getFirst();
-    T getLast();
-    T getAt();
-    T removeFirst();
-    T removeLast();
-    T removeAt(int index);
-    void removeBetween(int start, int end);
-    void clear();//delete array and create new empty;
+    //construct destruct, copy construct
+    vector();//A1                                                           done
+    vector(int capacity); //same as A1                                      done
+    vector(int capacity, int capacityIncrement);//same as A1                done
+    ~vector();                                                            //done
+    vector(const vector<T> &obj);                                         //done
+    //////////
+
+
+    //operators
+    vector<T>& operator=(const vector &obj);                                           //done
+    vector<T>& operator+(const vector &obj);// vector< > vect4; vect4=vect1 + vect2;    done
+    vector<T>& operator[](int index)const;//obj[2] returns value at 2 element;       done
+
+    void addLast(T item);                                                             //done
+    void addFirst(T item);                                                            //almost done, check with instructor
+    void addAt(int index, T item);                                                      //done
+    T getFirst()const;                                                                       //almost done, check with instructor
+    T getLast()const;                                                                        //almost done, check with instructor
+    T getAt(int index)const;                                                                 //almost done, check with instructor
+    T removeFirst();                                                                    //almost done, check with instructor
+    T removeLast();                                                                     //almost done, check with instructor
+    T removeAt(int index);                                                              //almost done, check with instructor
+    void removeBetween(int start, int end);                                             //done
+    void clear();//delete array and create new empty;                                   //done
+    int size();  //return nrOfItems                                                     //almost done, check with instructor
 
 };
+
+
+
+
+
+
 
 template <typename T>
 void vector<T>::expand()
@@ -91,6 +118,12 @@ void vector<T>::expand()
     delete [] this->items;
     this->items=temp;
 }
+
+
+
+
+
+
 template <typename T>
 void vector<T>::addAt(int index, T item)throw(...) //throw(...) ... means accept any type.
 {
@@ -109,7 +142,7 @@ void vector<T>::addAt(int index, T item)throw(...) //throw(...) ... means accept
          *  cout << e << endl;
          * }
          */
-    }
+ /*   }
     //if array full. expand and additem
     if(this->nrOfItems== this->capacity)
     {
@@ -118,6 +151,13 @@ void vector<T>::addAt(int index, T item)throw(...) //throw(...) ... means accept
         this->items[index]=item;
     }
 }
+
+
+
+
+
+
+
 
 
 template<typename T>
@@ -129,11 +169,23 @@ vector<T>::vector()
     this->items=new T[this->capacity];
 
 }
+
+
+
+
+
+
 template<typename T>
 vector<T>::~vector()
 {
     delete [] this->items;
 }
+
+
+
+
+
+
 template<typename T>
 vector<T>::vector(const vector<T> &obj)
 {
@@ -146,6 +198,13 @@ vector<T>::vector(const vector<T> &obj)
         this->items[i]=obj.items[i];
     }
 }
+
+
+
+
+
+
+
 template<typename T>
 vector<T>& vector<T>::operator =(const vector<T> &obj)
 {
@@ -163,10 +222,16 @@ vector<T>& vector<T>::operator =(const vector<T> &obj)
     }
     return *this;
 }
+
+
+
+
+
+
 template<typename T>
 vector<T>& vector<T>::operator+(const vector &obj)
 {
-    /*
+
     vector vect 1; //array of of size 10
     vect1.addAt(0,1);
     vector vect2;
@@ -174,7 +239,9 @@ vector<T>& vector<T>::operator+(const vector &obj)
     vect2.addAt(1,2);
     vector vect3;
     vect3 = vect1+vect2
-            */
+    */
+//full comment
+/*
     vector<T> v;
     for(int i=0; i< this->nrOfItems; i++)
     {
@@ -190,23 +257,64 @@ vector<T>& vector<T>::operator+(const vector &obj)
     return v ;
 
 }
+
+ * chain exception  with try-catch
+ * throw char
+ * throw int
+ * throw ...
+*/
+
+
+/* vector
+
+
 template<typename T>
-T vector<T>::operator[](int index)const throw(...)//throw check valid index
+vector<T>& vector<T>::operator[](int index)const throw(...)//throw check valid index   As return vector<T>& or T?
 {
-    if(index < 0 || index >this->nrOfItems)
+    if(index < 0 || index > this->nrOfItems)
     {
         throw "Totz invalid index!!";
     }
     return this->getAt(index);
 
 }
+
+
+
+
+
+
+
+
+//check if ok!
+template<typename T>
+void vector<T>::addFirst(T item)
+{
+    if(this->capacity==this->nrOfItems)
+        expand();
+    this->items[this->nrOfItems++] = this->items[0];
+    this->items[0]=item;
+}
+
+
+
+
+
+
+
 template<typename T>
 void vector<T>::addLast(T item)
 {
     if(this->capacity==this->nrOfItems)
         expand();
-    this->items[nrofItems++]=item;
+    this->items[nrOfItems++]=item;
 }
+
+
+
+
+
+
 
 template<typename T>
 void vector<T>::removeBetween(int start, int end)throw(...)
@@ -223,6 +331,46 @@ void vector<T>::removeBetween(int start, int end)throw(...)
     }
 }
 
+
+
+
+
+
+template<typename T>
+T vector<T>::removeFirst()
+{
+
+}
+
+
+
+
+
+
+template<typename T>
+T vector<T>::removeLast()
+{
+    ;
+}
+
+
+
+
+
+
+
+template<typename T>
+T vector<T>::removeAt(int index)
+{
+    ;
+}
+
+
+
+
+
+
+
 template<typename T>
 void vector<T>::clear()
 {
@@ -233,8 +381,27 @@ void vector<T>::clear()
     this->items= new T[this->capacity];
 }
 
-/////////////////////////////////////////////////////////////////////////////////
 
+
+
+
+//check with instructor
+template<typename T>
+int vector<T>::size()
+{
+    return this->nrOfItems;
+}
+
+*/
+
+
+
+
+
+///*
+/////////////////////////////////////////////////////////////////////////////////
+///// sorting searching
+/// ////////////////////////////////////////////////////////////////////////////
 void generatRandomValues(string arr[] , int SIZE); //fill arr
 template <typename T>
 void printAllValues(T arr[], int SIZE);//print with for looping
@@ -250,14 +417,18 @@ template <typename T>//only one function at a time.
 int binary_search(T arr[], int SIZE, T key);//
 //void swap(string &a, string &b);
 //int findMinimumPosition(string arr[], int SIZE);
-
+//*/
 //////////////////////////////////////////////////////
 /// \brief main
 /// \return
 //////////////////////////////////////////////////////
 //#include vector.h
+
+
+
 int main()
 {
+    /*
     ///////test vector
     vector<int> vect1;
     try
@@ -287,20 +458,25 @@ int main()
     {
         cout << e << endl;
     }
-
+    return 0;
+}   */
+    ///*
     ///////test sort search
     const int SIZE=20;
     //int intArr[SIZE];
     string arr[SIZE];
-    generatRandomValues(arr , SIZE);
+    /*generatRandomValues(arr , SIZE);
     printAllValues(arr, SIZE);
     selection_sort(arr, SIZE);
     printAllValues(arr, SIZE);
+    insertion_sort(arr, SIZE);
+*/
 
     //insert
     generatRandomValues(arr , SIZE);
     printAllValues(arr, SIZE);
-    insertion_sort(arr[], SIZE);
+
+    bubble_sort(arr,SIZE);
     printAllValues(arr, SIZE);
     return 0;
 }
@@ -311,16 +487,19 @@ int main()
 ///
 //////////////////////////////////////////////////
 
+
 void generatRandomValues(string arr[] , int SIZE)
 {
 
-    /* for numbers
+    //for numbers
+    /*
     srand((unsigned)(time(0)));
     for(int i=0; i < SIZE; i++)
     {
         arr[i] = (rand()%100+1);
     }
     */
+
     /**for string**/
     cout << SIZE << endl;
     arr[0]="sat";
@@ -331,8 +510,8 @@ void generatRandomValues(string arr[] , int SIZE)
     arr[5]="thur";
     arr[6]="fri";
 }
-
-void printAllValues(string arr, int SIZE)
+template <typename T>
+void printAllValues(T arr[], int SIZE)
 {
     for(int i=0; i < SIZE; i++)
     {
@@ -342,19 +521,19 @@ void printAllValues(string arr, int SIZE)
 
 //selection_sort
 template <typename T>
-void selection_sort(T arr, int SIZE)//sort low 2 big
+void selection_sort(T arr[], int SIZE)//sort low 2 big
 {
 
         T temp;
         int min_pos;
-        for(int i =0; i << SIZE; i++)
+        for(int i =0; i < SIZE; i++)
         {
             //find minimum
             min_pos=i; //Could init with -1, nothing found
             //don't need to check the last one.
-            for(int j=0; j << SIZE; j++)
+            for(int j=i+1; j < SIZE; j++)
             {
-                if(arr[i] <= arr[min_pos])
+                if(arr[j] <= arr[min_pos])
                 {
                     min_pos=j;
                 }
@@ -369,10 +548,12 @@ void selection_sort(T arr, int SIZE)//sort low 2 big
             }
         }
 }
+
+
 template <typename T>//only one function at a time.
 void insertion_sort(T arr[], int SIZE)
 {
-    T temp;
+    T tmp;
     for(int i=0; i < SIZE; i++)
     {
         //check all previously elements and start looping at i = 1
@@ -380,7 +561,7 @@ void insertion_sort(T arr[], int SIZE)
         for(int j=i; j > 0 && arr[j-1] > arr[j];j--)
         {
             //swap(arr[i],arr[i+1]);
-            temp = arr[j];
+            tmp = arr[j];
             arr[j] = arr[j-1];
             arr[j-1] = tmp;
         }
@@ -391,19 +572,22 @@ void insertion_sort(T arr[], int SIZE)
 template <typename T>//only one function at a time.
 void bubble_sort(T arr[], int SIZE)
 {
-    T temp;
-    for(int i=0; i < SIZE; i++)
+    T tmp;
+    for(int i=0; i < SIZE-1; i++)
     {
         //check all previously elements and start looping at i = 1
         //if j = 0 then j-1 gives segmentationFault
+    //    cout<<"array i: "<<arr[i]<<endl;
         for(int j=0; j < SIZE-1;j++)
         {
-            if(arr[j] > arr[j+1])
+        // cout<<"array j: "<<arr[j]<<endl;
+          if(arr[j] > arr[j+1])
             {
                 //swap(arr[i],arr[i+1]);
-                temp = arr[j];
-                arr[j] = arr[j-1];
-                arr[j-1] = tmp;
+              tmp = arr[j];
+              arr[j] = arr[j+1];
+              arr[j+1] = tmp;
+        //cout<<"swap"<<arr[j]<<","<<arr[j+1]<<endl;
             }
 
         }
